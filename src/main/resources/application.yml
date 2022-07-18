@@ -6,13 +6,13 @@ spring:
     url: jdbc:mysql://localhost:3306/message?useSSL=true&useUnicode=true&characterEncoding=utf-8
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: admin
+    password: ######
   redis:
     port: 6379
-    host: 120.53.102.71
+    host: #########
   mail:
-    username: 3137668254@qq.com
-    password: dcvguwdbrvssdeef
+    username: #########
+    password: ############
     host: smtp.qq.com
   mvc:
     hiddenmethod:
