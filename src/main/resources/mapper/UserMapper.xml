@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.poke.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.poke.pojo.User">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="username" column="username" jdbcType="VARCHAR"/>
+            <result property="password" column="password" jdbcType="VARCHAR"/>
+            <result property="email" column="email" jdbcType="VARCHAR"/>
+            <result property="dId" column="d_id" jdbcType="INTEGER"/>
+            <result property="post" column="post" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,username,password,
+        email,d_id,post
+    </sql>
+    <resultMap id="WithDeptResultMap" type="com.poke.pojo.User">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="dId" column="d_id" jdbcType="INTEGER"/>
+        <result property="post" column="post" jdbcType="OTHER"/>
+        <association property="department" javaType="com.poke.pojo.Department">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+        </association>
+    </resultMap>
+
+    <sql id="WithDept_Column_List">
+        u.id,u.username,u.password,
+        u.email,u.d_id,u.post,d.id,d.name
+    </sql>
+    <select id="countByEmail" resultType="int">
+        select count(*)
+        from user
+        where email = #{email,jdbcType=VARCHAR}
+    </select>
+    <select id="countByEmailAndPassword" resultType="int">
+        select count(*)
+        from user
+        where email = #{email,jdbcType=VARCHAR}
+          AND password = #{password,jdbcType=VARCHAR}
+    </select>
+    <update id="updatePasswordByEmail">
+        update user
+        set password = #{password,jdbcType=VARCHAR}
+        where email = #{email,jdbcType=VARCHAR}
+    </update>
+    <select id="selectByEmail" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user
+        where
+        email = #{email,jdbcType=VARCHAR}
+    </select>
+    <select id="getUserAndDeptByDId" resultMap="WithDeptResultMap">
+        select
+        <include refid="WithDept_Column_List"/>
+        from user u
+        left join department d
+        on u.d_id = d.id
+    </select>
+    <select id="getUserAndDept" resultMap="WithDeptResultMap">
+        select
+        <include refid="WithDept_Column_List"/>
+        from user u
+        left join department d
+        on u.d_id = d.id
+        where u.id = #{id}
+    </select>
+</mapper>
